@@ -1,0 +1,20 @@
+Test #,Water diaphram,Air flow rate (Nm3/h),Rotameter air pressure (bar),Water diaphragm press. drop (mbar),Relative pressure in the test section (bar),Type of differential pressure (pC-pD) or (pD-pC),Pressure drop in the pipe (mbar),Water temperature (C),Water mass in the pipe (g),Flow pattern
+24,S,0.25,6.0,76.35,0.29,pD-pC,71.17,24.82,370,Slug (ampiezza elevata)
+25,S,0.73,5.9,76.11,0.27,pD-pC,87.18,25.12,283,Slug
+26,S,2.94,5.0,75.52,0.27,pD-pC,91.77,24.92,216,Slug
+27,S,8.43,5.4,75.62,0.26,pD-pC,97.23,24.42,125,Slug/churn
+28,S,15.12,4.2,75.34,0.27,pD-pC,96.27,24.33,59,Churn/annular
+29,S,0.25,6.0,472.5,0.31,pD-pC,18.28,20.81,620,Bubbly - warning ( pressione invariata )
+30,S,0.72,5.9,462.5,0.32,pD-pC,27.75,20.13,530,Slug - warning
+31,S,2.88,5.2,462.5,0.32,pD-pC,36.3,19.25,328,Slug - warning
+32,S,8.31,5.4,244.62,0.28,pD-pC,79.43,18.37,175,Slug
+33,S,15.26,4.2,243.33,0.29,pD-pC,72.83,18.27,112,Slug
+34,S,2.8,5.2,244.77,0.28,pD-pC,79.91,17.88,236,Slug
+35,M,0.29,6.0,85.37,0.32,pD-pC,24.77,16.81,578,Bubbly
+36,M,0.71,5.9,85.41,0.31,pD-pC,36.83,16.81,503,Slug
+37,M,2.9,5.2,85.32,0.31,pD-pC,52.12,16.81,323,Slug
+38,M,8.36,5.4,84.45,0.33,pD-pC,27.86,17.01,221,Slug
+39,M,0.28,6.0,215.0,0.34,pD-pC,12.01,17.69,643,Bubbly
+40,M,2.89,5.2,213.3,0.34,pD-pC,17.41,17.01,387,Slug/churn
+41,M,8.3,5.4,209.1,0.78,pC-pD,22.68,17.88,283,Churn/annular
+42,M,15.09,4.3,204.36,0.44,pC-pD,57.76,18.08,206,Slug/churn

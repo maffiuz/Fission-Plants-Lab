@@ -2,9 +2,10 @@ import pandas as pd
 import scipy.constants as cs
 import numpy as np
 from pyfluids import Fluid, FluidsList, Input
+from plotters import *
 
 def main():
-    data = pd.read_csv('data.csv')
+    data = pd.read_csv('data/data.csv')
     
     # Constants
     DIAM_IN = 0.026                 # m, pipe inner diameter
@@ -54,6 +55,35 @@ def main():
     data['Air mass flow rate (kg/h)'] = air_mass_flow_rate
     
     # =========================================
+    # 1- Comparison with Hewitt-Roberts and Taitel Ducker
+    # Hewitt-Roberts    
+    water_flow_rate  = water_mass_flow_rate/rho_water
+    jg = air_flow_rate/3600/FLOW_AREA
+    jl = water_flow_rate/FLOW_AREA 
+    
+    G_air = air_mass_flow_rate/3600/FLOW_AREA
+    G_water = water_mass_flow_rate/FLOW_AREA
+    
+    X_coord_HR = G_water**2/rho_water
+    Y_coord_HR = G_air**2/rho_air
+    labels_HR = []
+    
+    flow_pattern = data['Flow pattern']
+    for f in flow_pattern:
+        if 'slug' in f.lower() and 'churn' in f.lower():
+            labels_HR.append('S/C')
+        elif 'annular' in f.lower() and 'churn' in f.lower():
+            labels_HR.append('A/C')
+        elif 'slug' in f.lower():
+            labels_HR.append('S')
+        elif 'churn' in f.lower():
+            labels_HR.append('C')
+        elif 'bubbly' in f.lower():
+            labels_HR.append('B')
+        elif 'annular' in f.lower():
+            labels_HR.append('A')
+
+    # =========================================
     # Evaluation of the void fraction
     
     # Flow quality
@@ -81,8 +111,26 @@ def main():
     S = 1 + E1*np.pow(y/(1+y*E2)-y*E2,0.5)
     data['Void fraction - CISE correlation'] = 1/(1+(1-quality)/quality * rho_air/rho_water*S)
     
+    # Drift flux model
+    j = jl + jg
+    
+    # Bubbly flow
+    C0 = 1.13
+    ugj = 1.41 * np.pow(sigma_water*cs.g*(rho_water-rho_air)/rho_water**2,0.25)
+    
+    data['Void fraction - Drift flux model - Bubbly flow'] = jg/(C0*j+ugj)
+    
+    # Plug Flow
+    C0 = 1.2
+    ugj = 0.35 * np.sqrt((rho_water-rho_air)*cs.g*DIAM_IN/rho_water)
+    
+    data['Void fraction - Drift flux model - Plug flow'] = jg/(C0*j+ugj)
+    
     # Output
-    data.to_csv('output.csv',index=False, float_format='%.5f')
+    data.to_csv('data/output.csv',index=False, float_format='%.5f')
+    
+    # Plots
+    plot_HR(X_coord_HR,Y_coord_HR,labels_HR)
     
 if __name__ == '__main__':
     main()
