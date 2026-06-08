@@ -64,8 +64,8 @@ def main():
     G_air = air_mass_flow_rate/3600/FLOW_AREA
     G_water = water_mass_flow_rate/FLOW_AREA
     
-    X_coord_HR = G_water**2/rho_water
-    Y_coord_HR = G_air**2/rho_air
+    data['X coordinate Hewitt-Roberts map'] = G_water**2/rho_water
+    data['Y coordinate Hewitt-Roberts map'] = G_air**2/rho_air
     labels_HR = []
     
     flow_pattern = data['Flow pattern']
@@ -83,6 +83,8 @@ def main():
         elif 'annular' in f.lower():
             labels_HR.append('A')
 
+    data['Label Hewitt-Roberts map'] = labels_HR
+
     # =========================================
     # Evaluation of the void fraction
     
@@ -99,6 +101,10 @@ def main():
     
     # Zivi correlation
     data['Void fraction - Zivi correlation'] = 1/(1+(1-quality)/quality * np.pow(rho_air/rho_water,2/3))
+    
+    # Chisholm correlation
+    S = np.sqrt(1-quality*(1-rho_water/rho_air))
+    data['Void fraction - Chisholm correlation'] = 1/(1+(1-quality)/quality * rho_air/rho_water*S)
     
     # CISE correlation
     sigma_water = 0.072     # N/m
@@ -130,7 +136,9 @@ def main():
     data.to_csv('data/output.csv',index=False, float_format='%.5f')
     
     # Plots
-    plot_HR(X_coord_HR,Y_coord_HR,labels_HR)
+    plot_HR()
+    plot_VF()
     
 if __name__ == '__main__':
     main()
+    plt.show()

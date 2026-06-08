@@ -1,14 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-def plot_HR(X_coord, Y_coord, labels):
-    """Generates Hewitt-Roberts plot
 
-    Args:
-        X_coord (list): x coordinate of Hewitt-Roberts (G^2/rho)_liquid
-        Y_coord (_type_): x coordinate of Hewitt-Roberts (G^2/rho)_gas
-        labels (list(str)): letter labels for flow patterns
+def plot_HR():
+    """Generates Hewitt-Robers Map
+    Data is taken directly from the csv
     """
+    
+    data = pd.read_csv('data/output.csv')
+    X_coord = data['X coordinate Hewitt-Roberts map']
+    Y_coord = data['Y coordinate Hewitt-Roberts map']
+    labels = data['Label Hewitt-Roberts map']
+
     
     # Creating contour lines
     # Bubble -> Slug
@@ -86,7 +90,3 @@ def plot_HR(X_coord, Y_coord, labels):
     plt.text(1e4, 1000, 'Wispy-Annular', fontsize=10, ha='center',color='r')
     plt.grid()
     
-    plt.figure()
-    
-    
-    plt.show()
