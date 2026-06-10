@@ -90,3 +90,7 @@ def plot_HR():
     plt.text(1e4, 1000, 'Wispy-Annular', fontsize=10, ha='center',color='r')
     plt.grid()
     
+if __name__ == '__main__':
+    plot_HR()
+    plt.show()
+    
