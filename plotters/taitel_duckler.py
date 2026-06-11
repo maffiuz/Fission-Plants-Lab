@@ -13,23 +13,18 @@ def plot_TD_annular_slugchurn():
     
     plt.figure()
     plt.subplots_adjust(bottom=0.17)
-    # plt.loglog()
-    plt.semilogy()
+    plt.loglog()
     plt.plot(x_line,y_line,'k')
     plt.scatter(X_coord,Y_coord)
     for i, (xi, yi, label) in enumerate(zip(X_coord, Y_coord, labels)):
         plt.annotate(label, (xi, yi), xytext=(5, 5), textcoords='offset points', fontsize=10)
     plt.grid()
-    # plt.xlim((1e2,1e4))
-    plt.xlim((1e1,30))
-    # plt.ylim((1e-3,5))
-    plt.ylim((1e-2,5))
+    plt.xlim((1e2,1e4))
+    plt.ylim((1e-3,5))
     plt.xlabel(r'$\left(\frac{(dp/dz)_l}{(dp/dz)_g}\right)^{1/2}$')
     plt.ylabel(r'$j_g\rho_g^{1/2}[g(\rho_l-\rho_g)\sigma]^{-1/4}$')
-    # plt.text(1, 0.07, 'Slug churn', fontsize=13, ha='center',color='k')
-    # plt.text(1e3, 0.7, 'Annular', fontsize=13, ha='center',color='k')
-    plt.text(20, 0.02, 'Slug churn', fontsize=13, ha='center',color='k')
-    plt.text(25, 3, 'Annular', fontsize=13, ha='center',color='k')
+    plt.text(1, 0.07, 'Slug churn', fontsize=13, ha='center',color='k')
+    plt.text(1e3, 0.7, 'Annular', fontsize=13, ha='center',color='k')
     
     
 def plot_TD_slugs_churn():
