@@ -55,7 +55,7 @@ def plot_HR():
     
     # Plots
     plt.figure()
-    plt.title('Hewitt-Roberts Map')
+    plt.subplots_adjust(bottom=0.13)
     plt.loglog()
     plt.plot(X_bolla_slug_2, Y_bolla_slug_2, 'r', linewidth=2)
     plt.plot(X_bolla_slug_3, Y_bolla_slug_3, 'r', linewidth=2)

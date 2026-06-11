@@ -12,6 +12,7 @@ def main():
     FLOW_AREA = DIAM_IN**2/4*cs.pi  # m2, flow cross section
     M0 = 1.014                      # kg
     M_RES = 0.116                   # kg
+    HEIGHT = 1.5                    # m
     
     # Water properties
     water = Fluid(FluidsList.Water)
@@ -51,6 +52,9 @@ def main():
     air_mass_flow_rate = 1.204*np.sqrt((air_relative_press+1.023)/1.023)*air_flow_rate
     rho_air = air_mass_flow_rate/air_flow_rate
     
+    # Air viscosity at 20°C
+    mu_air = [Fluid(FluidsList.Air).with_state(Input.density(rho),Input.temperature(20)).dynamic_viscosity for rho in rho_air]
+    
     data['Air density (kg/m3)'] = rho_air   
     data['Air mass flow rate (kg/h)'] = air_mass_flow_rate
     
@@ -64,24 +68,27 @@ def main():
     G_air = air_mass_flow_rate/3600/FLOW_AREA
     G_water = water_mass_flow_rate/FLOW_AREA
     
-    data['X coordinate Hewitt-Roberts map'] = G_water**2/rho_water
-    data['Y coordinate Hewitt-Roberts map'] = G_air**2/rho_air
+    data['X coordinate Hewitt-Roberts map'] = jl**2*rho_water
+    data['Y coordinate Hewitt-Roberts map'] = jg**2*rho_air
     labels_HR = []
     
     flow_pattern = data['Flow pattern']
+    i = 1
     for f in flow_pattern:
         if 'slug' in f.lower() and 'churn' in f.lower():
-            labels_HR.append('S/C')
+            labels_HR.append(f'{i}: S/C')
         elif 'annular' in f.lower() and 'churn' in f.lower():
-            labels_HR.append('A/C')
+            labels_HR.append(f'{i}: A/C')
         elif 'slug' in f.lower():
-            labels_HR.append('S')
+            labels_HR.append(f'{i}: S')
         elif 'churn' in f.lower():
-            labels_HR.append('C')
+            labels_HR.append(f'{i}: C')
         elif 'bubbly' in f.lower():
-            labels_HR.append('B')
+            labels_HR.append(f'{i}: B')
         elif 'annular' in f.lower():
-            labels_HR.append('A')
+            labels_HR.append(f'{i}: A')
+        
+        i += 1
 
     data['Label Hewitt-Roberts map'] = labels_HR
 
@@ -132,12 +139,42 @@ def main():
     
     data['Void fraction - Drift flux model - Plug flow'] = jg/(C0*j+ugj)
     
+    # =========================================
+    # Pressure drops
+    Re_water = G_water*DIAM_IN/mu_water
+    Re_air = G_air*DIAM_IN/mu_air
+    
+    friction_factor = lambda Re_vector: np.array([64.0/Re if Re < 3000 else 0.316 * (Re**(-0.25)) for Re in Re_vector])
+    
+    f_water = friction_factor(Re_water)
+    f_air = friction_factor(Re_air)
+    
+    dp_water = rho_water*cs.g*HEIGHT + 1/2*f_water*HEIGHT/DIAM_IN*G_water**2/rho_water
+    dp_air = rho_air*cs.g*HEIGHT + 1/2*f_air*HEIGHT/DIAM_IN*G_air**2/rho_air
+    
+    # =========================================
+    # Plot data
+    # TD annular-slugchurn 
+    data['X coordinate TD map - annular-slugchurn'] = np.sqrt(dp_water/dp_air)
+    data['Y coordinate TD map - annular-slugchurn'] = jg*rho_air**(1/2)*pow(cs.g*(rho_water-rho_air)*sigma_water,-1/4)
+    
+    # TD slug-churn 
+    data['X coordinate TD map - slug-churn'] = j/pow(cs.g*DIAM_IN,1/2)
+    data['Y coordinate TD map - slug-churn'] = data['Measured void fraction']
+    
+    # TD bubbly-slugchurn 
+    data['X coordinate TD map - bubbly-slugchurn'] = jg*rho_water**(1/2)*pow(cs.g*(rho_water-rho_air)*sigma_water,-1/4)
+    data['Y coordinate TD map - bubbly-slugchurn'] = jl/jg
+    
     # Output
     data.to_csv('data/output.csv',index=False, float_format='%.5f')
     
     # Plots
     plot_HR()
     plot_VF()
+    plot_TD_annular_slugchurn()
+    plot_TD_slugs_churn()
+    plot_TD_bubbly_slugchurn()
     
 if __name__ == '__main__':
     main()
