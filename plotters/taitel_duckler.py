@@ -19,7 +19,7 @@ def plot_TD_annular_slugchurn():
     for i, (xi, yi, label) in enumerate(zip(X_coord, Y_coord, labels)):
         plt.annotate(label, (xi, yi), xytext=(5, 5), textcoords='offset points', fontsize=10)
     plt.grid()
-    plt.xlim((1e2,1e4))
+    plt.xlim((1e-2,1e4))
     plt.ylim((1e-3,5))
     plt.xlabel(r'$\left(\frac{(dp/dz)_l}{(dp/dz)_g}\right)^{1/2}$')
     plt.ylabel(r'$j_g\rho_g^{1/2}[g(\rho_l-\rho_g)\sigma]^{-1/4}$')

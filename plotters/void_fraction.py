@@ -7,7 +7,7 @@ def plot_VF():
     data = pd.read_csv('data/output.csv')
     
     VF_measured = data['Measured void fraction']
-    VF_homogenous = data['Void fraction - Homogenous model']
+    VF_homogenous = data['Void fraction - Homogeneous model']
     VF_zivi = data['Void fraction - Zivi correlation']
     VF_chisholm = data['Void fraction - Chisholm correlation']
     VF_CISE = data['Void fraction - CISE correlation']
